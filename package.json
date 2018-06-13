@@ -1,0 +1,11 @@
+{
+  "name": "execbutton",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "$NODE $NODE_DEBUG_OPTION ./app.js"
+  },
+  "dependencies": {
+    "blessed": "^0.1.81"
+  }
+}
