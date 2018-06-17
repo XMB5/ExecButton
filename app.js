@@ -33,9 +33,13 @@ const screen = blessed.screen({
     ignoreDockContrast: true
 });
 
+//add the EXECBUTTON=1 environment variable
+process.env.EXECBUTTON = 1;
+
 //create the terminal
 let left = blessed.terminal({
     parent: screen,
+    env: process.env,
     left: 0,
     top: 0,
     width: '50%',
