@@ -17,9 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const blessed = require('blessed');
-const childProcess = require('child_process');
-
 if (process.argv.length !== 3) {
     console.log('usage: execbutton <command>');
     process.exit(1);
@@ -27,76 +24,102 @@ if (process.argv.length !== 3) {
 
 let command = process.argv[2];
 
-function showScreen () {
+const blessed = require('blessed');
 
-    // Create a screen object.
-    let screen = blessed.screen({
-        smartCSR: true
-    });
+const screen = blessed.screen({
+    smartCSR: true,
+    fullUnicode: true,
+    dockBorders: true,
+    ignoreDockContrast: true
+});
 
-    screen.title = command;
-
-    // Create a box perfectly centered horizontally and vertically.
-    let box = blessed.box({
-        top: 'center',
-        left: 'center',
-        width: '100%',
-        height: '100%',
-        tags: true,
+//create the terminal
+let left = blessed.terminal({
+    parent: screen,
+    left: 0,
+    top: 0,
+    width: '50%',
+    height: '100%',
+    style: {
         border: {
-            type: 'line'
-        },
-        style: {
-            fg: 'white',
-            bg: 'green',
-            border: {
-                fg: 'white'
-            }
+            fg: 'green'
         }
-    });
+    }
+});
 
-    //add text to the box
-    let label = blessed.text({
-        content: command,
-        left: 'center',
-        top: 'center',
-        style: {
-            fg: 'white',
-            bg: 'red'
+//create the box that starts the command
+let topright = blessed.box({
+    parent: screen,
+    left: '50%',
+    top: 0,
+    width: '50%',
+    height: '50%',
+    style: {
+        bg: 'green',
+        border: {
+            fg: 'white'
         }
-    });
-    box.append(label);
+    }
+});
 
+//add text to the command box
+blessed.text({
+    parent: topright,
+    content: command,
+    left: 'center',
+    top: 'center',
+    style: {
+        fg: 'white',
+        bg: 'blue'
+    }
+});
 
-    // Append our box to the screen.
-    screen.append(box);
+let bottomright = blessed.box({
+    parent: screen,
+    top: '50%',
+    left: '50%',
+    width: '50%',
+    height: '50%',
+    style: {
+        bg: 'red',
+        border: {
+            fg: 'white'
+        }
+    }
+});
 
-    // If our box is clicked, change the content.
-    box.on('click', function() {
-        runCommand();
-        screen.destroy();
-    });
+//add text to the cancel box
+blessed.text({
+    parent: bottomright,
+    content: 'SIGINT',
+    left: 'center',
+    top: 'center',
+    style: {
+        fg: 'white',
+        bg: 'blue'
+    }
+});
 
-    // Quit on Escape, q, or Control-C.
-    screen.key(['escape', 'q', 'C-c'], function() {
-        return process.exit(0);
-    });
+//add action to the command box
+topright.on('click', () => {
+    //type the command
+    left.pty.write(command + '\n');
+});
 
-    // Focus our element.
-    box.focus();
+//add action to the cancel box
+bottomright.on('click', () => {
+    //send end of text, same as ctrl-c
+    left.pty.write('\x03');
+});
 
-    // Render the screen.
-    screen.render();
+//ensure the terminal stays in focus
+topright.on('focus', () => left.focus());
+bottomright.on('focus', () => left.focus());
+left.focus();
 
-}
+screen.key('C-q', function() {
+    left.kill();
+    return screen.destroy();
+});
 
-function runCommand () {
-    let child = childProcess.spawn('bash', ['-c', command]);
-    child.stdout.pipe(process.stdout);
-    child.stderr.pipe(process.stderr);
-    child.on('exit', () => {
-        showScreen();
-    });
-}
-
-showScreen();
+screen.render();

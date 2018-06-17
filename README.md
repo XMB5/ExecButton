@@ -1,10 +1,11 @@
 # ExecButton
-Click a button to run a command
+Click a button to run a command, and click a button to stop it.
+Designed for systems without a keyboard.
 
 # Example
-`node app.js 'curl -s -L http://bit.ly/10hA8iC | bash'`
+`node app.js 'while true; do echo hi; sleep 1; done'`
 
-![rickrolled from button click](https://imgur.com/download/aP3wkVy)
+![Example GIF](https://i.imgur.com/H0hlGZy.gif)
 
 # Donate
 [![PayPal Button](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/SamFoxman)

@@ -6,6 +6,8 @@
     "start": "$NODE $NODE_DEBUG_OPTION ./app.js"
   },
   "dependencies": {
-    "blessed": "^0.1.81"
+    "blessed": "^0.1.81",
+    "pty.js": "^0.3.1",
+    "term.js": "0.0.7"
   }
 }
