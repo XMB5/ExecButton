@@ -5,6 +5,8 @@ Designed for systems without a keyboard.
 # Example
 `node app.js 'while true; do echo hi; sleep 1; done'`
 
+Press `ctrl-q` to stop.
+
 ![Example GIF](https://i.imgur.com/H0hlGZy.gif)
 
 # Donate
