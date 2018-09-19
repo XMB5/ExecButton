@@ -9,9 +9,6 @@ Press `ctrl-q` to stop.
 
 ![Example GIF](https://i.imgur.com/H0hlGZy.gif)
 
-# Donate
-[![PayPal Button](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/SamFoxman)
-
 # License
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-red.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
